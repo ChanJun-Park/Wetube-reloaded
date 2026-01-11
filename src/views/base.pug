@@ -1,0 +1,30 @@
+doctype html
+html(lang="ko")
+    head
+        title #{pageTitle} | Wetube
+        link(rel="stylesheet", href="https://unpkg.com/mvp.css")
+    body
+        header 
+            h1=pageTitle
+            nav
+                ul
+                    li
+                        a(href="/videos/upload") Upload
+                    li
+                        a(href="/") Home
+                    li
+                        a(href="/search") Search
+                    
+                    if loggedIn
+                        li
+                            a(href="/logout") logout
+                        li 
+                            a(href="/profile") #{loggedInUser.userName}의 profile
+                    else
+                        li
+                            a(href="/join") Join
+                        li 
+                            a(href="/login") Login
+        main
+            block content
+    include partials/footer.pug
