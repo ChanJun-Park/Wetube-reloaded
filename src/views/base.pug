@@ -17,7 +17,9 @@ html(lang="ko")
                     
                     if loggedIn
                         li
-                            a(href="/logout") logout
+                            a(href="/users/edit") Edit profile
+                        li
+                            a(href="/users/logout") logout
                         li 
                             a(href="/profile") #{loggedInUser.userName}의 profile
                     else

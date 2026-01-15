@@ -31,6 +31,14 @@ export const postJoin = async (req, res) => {
     }
 };
 
+export const getEdit = (req, res) => {
+    return res.render("edit-profile");
+};
+
+export const postEdit = (req, res) => {
+    return res.render("edit-profile");
+};
+
 export const edit = (req, res) => res.send("Edit User");
 
 export const remove = (req, res) => res.send("Delete User");
@@ -41,7 +49,7 @@ export const getLogin = (req, res) =>
 export const postLogin = async (req, res) => {
     const { userName, password } = req.body;
     const pageTitle = "Login";
-    const user = await User.findOne({ userName });
+    const user = await User.findOne({ userName: userName, socialOnly: false });
 
     if (!user) {
         return res.status(400).render("login", {
@@ -65,7 +73,10 @@ export const postLogin = async (req, res) => {
     return res.redirect("/");
 };
 
-export const logout = (req, res) => res.send("Logout User");
+export const logout = (req, res) => {
+    req.session.destroy();
+    return res.redirect("/");
+};
 
 export const see = (req, res) => res.send("See User Profile");
 
@@ -128,24 +139,21 @@ export const finishGithubLogin = async (req, res) => {
             // 여기서는 이미 계정이 있다면 바로 로그인 시켜주고
             // 계정이 없다면 계정을 생성하고,
             // 소셜 로그인으로 계정을 만들었다면, 패스워드 방식으로 로그인 시도할때 실패 처리를 한다.
-            const existingUser = await User.findOne({ email: emailObj.email });
-            if (existingUser) {
-                req.session.isLoggedIn = true;
-                req.session.user = existingUser;
-                return res.redirect("/");
-            } else {
-                const newUser = await User.create({
+            let user = await User.findOne({ email: emailObj.email });
+            if (!user) {
+                user = await User.create({
                     name: userDataJson.name,
                     userName: userDataJson.login,
                     email: emailObj.email,
                     password: "",
                     socialOnly: true,
                     location: userDataJson.location,
+                    avartarUrl: userDataJson.avatar_url,
                 });
-                req.session.isLoggedIn = true;
-                req.session.user = newUser;
-                return res.redirect("/");
             }
+            req.session.isLoggedIn = true;
+            req.session.user = user;
+            return res.redirect("/");
         }
     } else {
         return res.redirect("/login");
