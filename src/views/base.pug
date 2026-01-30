@@ -9,19 +9,19 @@ html(lang="ko")
             nav
                 ul
                     li
-                        a(href="/videos/upload") Upload
-                    li
                         a(href="/") Home
                     li
                         a(href="/search") Search
                     
                     if loggedIn
                         li
+                            a(href="/videos/upload") Upload
+                        li
                             a(href="/users/edit") Edit profile
                         li
                             a(href="/users/logout") logout
                         li 
-                            a(href="/profile") #{loggedInUser.userName}의 profile
+                            a(href=`/users/${loggedInUser._id}`) #{loggedInUser.userName}의 profile
                     else
                         li
                             a(href="/join") Join
