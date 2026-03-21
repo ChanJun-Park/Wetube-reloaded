@@ -156,6 +156,7 @@ export const postLogin = async (req, res) => {
 };
 
 export const logout = (req, res) => {
+    console.log("logout");
     req.session.destroy();
     return res.redirect("/");
 };
