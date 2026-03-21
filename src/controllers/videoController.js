@@ -77,6 +77,10 @@ export const postUpload = async (req, res) => {
             hashtags: Video.formatHashtags(hashtags),
         });
         await video.save();
+        const user = await User.findById(_id);
+        user.videos.push(video._id);
+        user.save();
+
         return res.redirect("/");
     } catch (error) {
         console.log(`Error: ${error}`);
